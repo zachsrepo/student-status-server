@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,6 +18,19 @@ namespace student_status_server.Controllers
         public UsersController(StudentStatusDbContext context)
         {
             _context = context;
+        }
+
+        //Login for Users
+        [HttpGet("{username}/{password}")]
+        public async Task<ActionResult<User>> Login(string username, string password)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == username && x.Password == password);
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            return user;
         }
 
         // GET: api/Users
@@ -47,6 +60,73 @@ namespace student_status_server.Controllers
             }
 
             return user;
+        }
+
+        //Setting the status of the user
+        [HttpPut("green/{id}")]
+        public async Task<IActionResult> Green(int id)
+        {
+            var request = await _context.Users.FindAsync(id);
+            if (request == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                request.Status = "GREEN";
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+        //Setting the status of the user
+        [HttpPut("red/{id}")]
+        public async Task<IActionResult> Red(int id)
+        {
+            var request = await _context.Users.FindAsync(id);
+            if (request == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                request.Status = "RED";
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        //Setting the status of the user
+        [HttpPut("yellow/{id}")]
+        public async Task<IActionResult> Yellow(int id)
+        {
+            var request = await _context.Users.FindAsync(id);
+            if (request == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                request.Status = "YELLOW";
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        //Setting the status of the user
+        [HttpPut("white/{id}")]
+        public async Task<IActionResult> White(int id)
+        {
+            var request = await _context.Users.FindAsync(id);
+            if (request == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                request.Status = "WHITE";
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         // PUT: api/Users/5
